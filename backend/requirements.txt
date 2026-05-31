@@ -7,3 +7,7 @@ python-dotenv==1.0.0
 bcrypt==4.0.1
 python-jose[cryptography]==3.3.0
 python-multipart==0.0.17
+pypdf==5.0.0
+python-docx==1.1.0
+langchain==0.3.0
+langchain-community==0.3.0
