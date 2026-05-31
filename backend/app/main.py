@@ -1,10 +1,19 @@
 from fastapi import FastAPI
+from .database import engine, Base
+from . import models
+from .routers import auth
+
+# 自动创建所有表
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="智问 API",
     description="AI智能知识库问答系统后端",
-    version="0.1.0"
+    version="0.3.0"
 )
+
+# 注册路由
+app.include_router(auth.router)
 
 @app.get("/")
 def read_root():
