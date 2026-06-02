@@ -5,6 +5,7 @@ from ..database import get_db
 from ..models import Document, KnowledgeBase
 from ..security import get_current_user
 from ..services.document_parser import load_document, split_documents
+from ..services.vector_store import add_documents_to_kb
 
 router = APIRouter(prefix="/documents", tags=["文档"])
 
@@ -51,10 +52,13 @@ async def upload_document(
     db.commit()
     db.refresh(doc)
 
-    # 5. 解析并切分
+    # 5. 解析 + 切分 + 向量化入库
     try:
         raw_docs = load_document(file_path)
         chunks = split_documents(raw_docs)
+
+        # 向量化存入 ChromaDB
+        add_documents_to_kb(kb_id, chunks)
 
         # 更新状态为完成
         doc.status = "done"
